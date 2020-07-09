@@ -1,0 +1,6 @@
+name: openshift4-registry
+title: OpenShift 4 Registry
+version: master
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/partials/nav.adoc
