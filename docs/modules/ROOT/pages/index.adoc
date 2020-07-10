@@ -1,3 +1,6 @@
 = OpenShift 4 Registry
 
 {doctitle} is a Commodore component to manage the image registry on OpenShift 4.
+It creates a `configs.imageregistry.operator.openshift.io` object named `cluster` in order to configure the image registry of the cluster.
+
+See the xref:references/parameters.adoc[parameters] reference for further details.

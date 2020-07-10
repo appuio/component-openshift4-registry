@@ -1,3 +1,15 @@
 parameters:
   openshift4_registry:
     namespace: openshift-image-registry
+    config:
+      httpSecret: '?{vaultkv:${customer:name}/${cluster:name}/registry/httpSecret}'
+      logging: 2
+      managementState: Managed
+      nodeSelector:
+        node-role.kubernetes.io/worker: ''
+      replicas: 2
+      rolloutStrategy: RollingUpdate
+      storage: {}
+    pruning:
+      keepTagRevisions: 3
+      suspend: false

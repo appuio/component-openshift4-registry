@@ -1,0 +1,67 @@
+= Parameters
+
+The parent key for all of the following parameters is `openshift4_registry`.
+
+
+== `config`
+
+[horizontal]
+type:: dictionary
+default:: Default image registry.
+
+A dictionary holding the `.spec` for the image registry config.
+
+See the https://docs.openshift.com/container-platform/latest/registry/configuring-registry-operator.html#registry-operator-configuration-resource-overview_configuring-registry-operator[OpenShift docs] for available parameters.
+
+
+=== `routes`
+
+[horizontal]
+type:: array
+default:: undefined
+
+To create custom routes for exposing the registry, create an entry in this array (see <<Example>>).
+The `secretName` can be used to specify a custom TLS certificate.
+By default it uses the default wildcard certificate of the router.
+
+
+=== `storage`
+
+[horizontal]
+type:: dictionary
+default:: undefined
+
+Configure the registry storage based on the cloud provider.
+
+It's suggested to define this higher up the config hierarchy.
+Most probably the one of the cloud region.
+
+
+== `pruning`
+
+[horizontal]
+type:: dictionary
+default:: Default pruning options.
+
+A dictionary holding the `.spec` for the image pruning config.
+
+See the https://docs.openshift.com/container-platform/latest/applications/pruning-objects.html#pruning-images_pruning-objects[OpenShift docs] for available parameters.
+
+To disable image pruning, set the paramteter `pruning.suspend` to `true`.
+
+
+== Example
+
+[source,yaml]
+----
+config:
+  routes:
+    - name: example-route
+      hostname: registry.example.com
+      secretName: example-route-tls
+  storage:
+    gcs:
+      bucket: c-mist-sg7hn-image-registry-europe-west6-ilspltsbwrcmskyohcoml
+pruning:
+  schedule: '13 */2 * * *'
+----
