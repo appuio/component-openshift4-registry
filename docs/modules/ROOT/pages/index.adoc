@@ -4,3 +4,14 @@
 It creates a `configs.imageregistry.operator.openshift.io` object named `cluster` in order to configure the image registry of the cluster.
 
 See the xref:references/parameters.adoc[parameters] reference for further details.
+
+== Node Selector
+
+A node selector is configured to only run the ingress controller pods on infra nodes.
+By doing so, the registry can be run on only a subset of the worker nodes.
+
+[IMPORTANT]
+====
+Ensure that the target cluster does have nodes with the infra role label set.
+See the components defaults for the exact value.
+====

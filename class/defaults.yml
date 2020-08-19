@@ -6,7 +6,7 @@ parameters:
       logging: 2
       managementState: Managed
       nodeSelector:
-        node-role.kubernetes.io/worker: ''
+        node-role.kubernetes.io/infra: ''
       replicas: 2
       rolloutStrategy: RollingUpdate
       storage: {}
