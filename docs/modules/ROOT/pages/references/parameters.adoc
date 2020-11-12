@@ -56,8 +56,8 @@ type:: dictionary
 default:: undefined
 
 A dictionary holding a set of S3 credentials.
-If set, the secret `mage-registry-private-configuration-user`.
-Do this when configuring an S3 type at `config.storage`.
+If set, the secret `image-registry-private-configuration-user` will be created containing the credentials.
+Use this when configuring an S3 type for `config.storage`.
 
 === `accessKey`
 
