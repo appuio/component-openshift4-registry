@@ -21,4 +21,14 @@ local versionGroup = 'imageregistry.operator.openshift.io/v1';
   '20_image_pruning': kube._Object(versionGroup, 'ImagePruner', 'cluster') {
     spec+: params.pruning,
   },
+  [if std.objectHas(params, 's3Credentials') then '30_s3_credentials']: kube.Secret('image-registry-private-configuration-user') {
+    metadata+: {
+      namespace: params.namespace,
+    },
+    // stringData because password comes from secret ref
+    stringData: {
+      REGISTRY_STORAGE_S3_ACCESSKEY: params.s3Credentials.accessKey,
+      REGISTRY_STORAGE_S3_SECRETKEY: params.s3Credentials.secretKey,
+    },
+  },
 }
