@@ -49,19 +49,51 @@ See the https://docs.openshift.com/container-platform/latest/applications/prunin
 
 To disable image pruning, set the paramteter `pruning.suspend` to `true`.
 
+== 's3Credentials`
+
+[horizontal]
+type:: dictionary
+default:: undefined
+
+A dictionary holding a set of S3 credentials.
+If set, the secret `image-registry-private-configuration-user` will be created containing the credentials.
+Use this when configuring an S3 type for `config.storage`.
+
+=== `accessKey`
+
+[horizontal]
+type:: string
+default:: undefined
+
+Access key for an S3 type storage.
+
+=== `secretKey`
+
+[horizontal]
+type:: string
+default:: undefined
+
+Secret key for an S3 type storage.
 
 == Example
 
 [source,yaml]
 ----
-config:
-  routes:
-    - name: example-route
-      hostname: registry.example.com
-      secretName: example-route-tls
-  storage:
-    gcs:
-      bucket: c-mist-sg7hn-image-registry-europe-west6-ilspltsbwrcmskyohcoml
-pruning:
-  schedule: '13 */2 * * *'
+parameters:
+  openshift4_registry:
+    config:
+      routes:
+        - name: example-route
+          hostname: registry.example.com
+          secretName: example-route-tls
+      storage:
+        s3:
+          bucket: ${cluster:name}-image-registry
+          region: somewhere
+          regionEndpoint: https://objects.example.com
+    s3Credentials:
+       accessKey: ?{vaultkv:${cluster:tenant}/${cluster:name}/openshift4_registry/s3_access_key}'
+       secretKey: ?{vaultkv:${cluster:tenant}/${cluster:name}/openshift4_registry/s3_secret_key}'
+    pruning:
+      schedule: '13 */2 * * *'
 ----

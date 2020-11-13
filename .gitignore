@@ -1,0 +1,4 @@
+# Artifacts from `commodore component compile`
+compiled/
+jsonnetfile.lock.json
+vendor/

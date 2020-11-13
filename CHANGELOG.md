@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial implementation ([#1])
+- Ability to configure S3 credentials ([#4])
 
 ### Changed
 - Node selector to use infra nodes ([#2])
@@ -16,3 +17,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [#1]: https://github.com/appuio/component-openshift4-registry/pull/1
 [#2]: https://github.com/appuio/component-openshift4-registry/pull/2
+[#4]: https://github.com/appuio/component-openshift4-registry/pull/4
