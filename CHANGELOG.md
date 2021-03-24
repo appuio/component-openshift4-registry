@@ -13,8 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Node selector to use infra nodes ([#2])
 
+## Fixed
+
+- Detection of component presence ([#5])
+
+
 [Unreleased]: https://github.com/appuio/component-openshift4-registry/compare/02f5d61c9c14664c621bb1cfe23f5e9f122c8065...HEAD
 
 [#1]: https://github.com/appuio/component-openshift4-registry/pull/1
 [#2]: https://github.com/appuio/component-openshift4-registry/pull/2
 [#4]: https://github.com/appuio/component-openshift4-registry/pull/4
+[#5]: https://github.com/appuio/component-openshift4-registry/pull/5
