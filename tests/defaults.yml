@@ -1,1 +1,28 @@
----
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-cert-manager/v2.2.0/lib/cert-manager.libsonnet
+        output_path: vendor/lib/cert-manager.libsonnet
+
+  openshift4_registry:
+    routes:
+      registry-route:
+        hostname: registry.cluster.example.org
+        secretName: registry-route-tls
+
+    cert_manager_certs:
+      registry-route-tls:
+        spec:
+          dnsNames:
+            - registry.cluster.example.org
+          issuerRef:
+            name: letsencrypt-staging
+            kind: ClusterIssuer
+
+    secrets:
+      alt-route-tls:
+        stringData:
+          tls.crt: 'certificate data'
+          tls.key: 'certificate key vault ref'
+          ca.crt: 'ca certificate data'

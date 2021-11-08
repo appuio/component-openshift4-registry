@@ -13,3 +13,6 @@ parameters:
     pruning:
       keepTagRevisions: 3
       suspend: false
+    routes: {}
+    secrets: {}
+    cert_manager_certs: {}
