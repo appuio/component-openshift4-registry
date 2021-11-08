@@ -1,0 +1,8 @@
+:global:
+  componentName: openshift4-registry
+  githubUrl: https://github.com/appuio/component-openshift4-registry
+  feature_goldenTests: true
+
+docs/antora.yml:
+  name: openshift4-registry
+  title: OpenShift 4 Registry
