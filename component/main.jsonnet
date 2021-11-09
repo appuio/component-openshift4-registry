@@ -32,22 +32,25 @@ local registryConfigSpec =
       },
     },
   },
-  '10_image_registry': kube._Object(versionGroup, 'Config', 'cluster') {
-    spec+: registryConfigSpec,
-  },
-  '20_image_pruning': kube._Object(versionGroup, 'ImagePruner', 'cluster') {
-    spec+: params.pruning,
-  },
-  [if std.objectHas(params, 's3Credentials') then '30_s3_credentials']: kube.Secret('image-registry-private-configuration-user') {
-    metadata+: {
-      namespace: params.namespace,
+  '10_image_registry':
+    kube._Object(versionGroup, 'Config', 'cluster') {
+      spec+: registryConfigSpec,
     },
-    // stringData because password comes from secret ref
-    stringData: {
-      REGISTRY_STORAGE_S3_ACCESSKEY: params.s3Credentials.accessKey,
-      REGISTRY_STORAGE_S3_SECRETKEY: params.s3Credentials.secretKey,
+  '20_image_pruning':
+    kube._Object(versionGroup, 'ImagePruner', 'cluster') {
+      spec+: params.pruning,
     },
-  },
+  [if std.objectHas(params, 's3Credentials') then '30_s3_credentials']:
+    kube.Secret('image-registry-private-configuration-user') {
+      metadata+: {
+        namespace: params.namespace,
+      },
+      // stringData because password comes from secret ref
+      stringData: {
+        REGISTRY_STORAGE_S3_ACCESSKEY: params.s3Credentials.accessKey,
+        REGISTRY_STORAGE_S3_SECRETKEY: params.s3Credentials.secretKey,
+      },
+    },
   [if std.length(tls.secrets) > 0 then '30_secrets']:
     tls.secrets,
   [if std.length(tls.certs) > 0 then '30_cert_manager_certs']:
