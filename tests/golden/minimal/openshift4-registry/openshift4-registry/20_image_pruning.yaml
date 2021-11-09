@@ -1,0 +1,10 @@
+apiVersion: imageregistry.operator.openshift.io/v1
+kind: ImagePruner
+metadata:
+  annotations: {}
+  labels:
+    name: cluster
+  name: cluster
+spec:
+  keepTagRevisions: 3
+  suspend: false
