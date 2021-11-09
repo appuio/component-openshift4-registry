@@ -10,22 +10,24 @@ type:: dictionary
 default:: Default image registry.
 
 A dictionary holding the `.spec` for the image registry config.
+The component will overwrite `config.routes` with the processed contents of parameter <<_routes,`routes`>> if that parameter exists.
 
 See the https://docs.openshift.com/container-platform/latest/registry/configuring-registry-operator.html#registry-operator-configuration-resource-overview_configuring-registry-operator[OpenShift docs] for available parameters.
 
 
-=== `routes`
+=== `config.routes`
 
 [horizontal]
 type:: array
 default:: undefined
 
-To create custom routes for exposing the registry, create an entry in this array (see <<Example>>).
-The `secretName` can be used to specify a custom TLS certificate.
-By default it uses the default wildcard certificate of the router.
+[WARNING]
+====
+Using this parameter is deprecated starting from component version v1.0.0.
+Use parameter <<_routes,`openshift4_registry.routes`>> to configure custom routes for the registry instead.
+====
 
-
-=== `storage`
+=== `config.storage`
 
 [horizontal]
 type:: dictionary
@@ -36,6 +38,63 @@ Configure the registry storage based on the cloud provider.
 It's suggested to define this higher up the config hierarchy.
 Most probably the one of the cloud region.
 
+
+== `routes`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+To create custom routes for exposing the registry, create entries in this array (see <<Example>>).
+Each value of the dictionary should be another dictionary.
+Keys `hostname` and `secretName` can be used to configure the hostname and TLS secret for each entry
+
+Each entry in the dictionary is transformed into an entry in the image registry config `.spec.routes` array.
+The key of each entry are used as the value for field `name` of the resulting entry in `.spec.routes`.
+If key `secretName` isn't provided for an entry, the router's default wildcard certificate is used for that route.
+
+== `preferredRegistryRoute`
+
+[horizontal]
+type:: string
+default:: `~` (null)
+
+This parameter can be used to specify which route's hostname should be used in the field `.status.publicDockerImageRepository` of `ImageStream` resources.
+The parameter should be set to a key which is present in parameter `routes`.
+If the default value inferred by the cluster should be used, leave the value of this parameter set to `null`.
+
+If the value of the parameter doesn't match a key in parameter `routes`, the component will print a warning and ignore the configuration.
+
+== `secrets`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each entry in parameter `secrets` is deployed onto the cluster as a Kubernetes Secret with `type=kubernetes.io/tls`.
+Entries with `null` values are skipped.
+This allows users to remove secrets which were configured higher up in the hierarchy.
+All secrets are deployed in namespace `openshift-image-registry`.
+
+The component has basic validation to ensure the secret contents are a plausible Kubernetes TLS secret.
+
+The dictionary keys are used as `metadata.name` for the resulting `Secret` resources.
+The dictionary values are directly merged into a `Secret` resource which only has `type=kubernetes.io/tls` set.
+The secrets are created in the namespace indicated by parameter `namespace`.
+
+== `cert_manager_certs`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each entry in parameter `cert_manager_certs` is deployed onto the cluster as a cert-manager `Certificate` resource.
+Entries with `null` values are skipped.
+This allows users to remove certificates which were configured higher up in the hierarchy.
+All `Certificate` resources are deployed in namespace `openshift-image-registry`.
+
+The dictionary keys are used as `metadata.name` and `spec.secretName` for the resulting `Certificate` resources.
+The dictionary values are then directly directly merged into the mostly empty `Certificate` resources.
 
 == `pruning`
 
@@ -49,7 +108,7 @@ See the https://docs.openshift.com/container-platform/latest/applications/prunin
 
 To disable image pruning, set the paramteter `pruning.suspend` to `true`.
 
-== 's3Credentials`
+== `s3Credentials`
 
 [horizontal]
 type:: dictionary
@@ -81,11 +140,28 @@ Secret key for an S3 type storage.
 ----
 parameters:
   openshift4_registry:
+    routes: <1>
+      primary-route:
+        hostname: registry.example.com
+        secretName: primary-route-tls
+      secondary-route:
+        hostname: registry.cluster.example.org
+        secretName: secondary-route-tls
+    preferredRegistryRoute: primary-route <2>
+    cert_manager_certs:
+      primary-route-tls: <3>
+        spec:
+          dnsNames:
+            - registry.example.com
+          issuerRef:
+            kind: ClusterIssuer
+            name: letsencrypt-staging
+    secrets:
+      secondary-route-tls: <4>
+        stringData:
+          tls.key: '?{vaultkv:...}'
+          tls.crt: '?{vaultkv:...}'
     config:
-      routes:
-        - name: example-route
-          hostname: registry.example.com
-          secretName: example-route-tls
       storage:
         s3:
           bucket: ${cluster:name}-image-registry
@@ -97,3 +173,19 @@ parameters:
     pruning:
       schedule: '13 */2 * * *'
 ----
+<1> Configure routes in top-level parameter `routes`.
+This configuration will result in the following contents for `config.routes`:
++
+[source,yaml]
+----
+- name: primary-route
+  hostname: registry.example.com
+  secretName: primary-route-tls
+- name: secondary-route
+  hostname: registry.cluster.example.org
+  secretName: secondary-route-tls
+----
+<2> This configuration ensures that `ImageStream` resources on the cluster will have `registry.example.com` as hostname in their `publicDockerImageRepository` value.
+<3> Configure a cert-manager `Certificate` resource to generate the TLS secret for route `primary-route`.
+<4> Directly configure a TLS secret for route `secondary-route`.
+As shown in the example, the TLS key and certificate can be fetched from Vault by using secret references.
