@@ -6,10 +6,15 @@ parameters:
         output_path: vendor/lib/cert-manager.libsonnet
 
   openshift4_registry:
+    preferredRegistryRoute: registry-route
+
     routes:
       registry-route:
         hostname: registry.cluster.example.org
         secretName: registry-route-tls
+      alt-route:
+        hostname: alt-registry.cluster.example.org
+        secretName: alt-route-tls
 
     cert_manager_certs:
       registry-route-tls:
