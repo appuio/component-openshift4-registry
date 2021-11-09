@@ -13,6 +13,7 @@ parameters:
     pruning:
       keepTagRevisions: 3
       suspend: false
+    preferredRegistryRoute: ~
     routes: {}
     secrets: {}
     cert_manager_certs: {}
