@@ -45,12 +45,12 @@ Most probably the one of the cloud region.
 type:: dictionary
 default:: `{}`
 
-To create custom routes for exposing the registry, create entries in this array (see <<Example>>).
+To create custom routes for exposing the registry, create entries in this dictionary (see <<Example>>).
 Each value of the dictionary should be another dictionary.
-Keys `hostname` and `secretName` can be used to configure the hostname and TLS secret for each entry
+Keys `hostname` and `secretName` can be used to configure the hostname and TLS secret for each entry.
 
 Each entry in the dictionary is transformed into an entry in the image registry config `.spec.routes` array.
-The key of each entry are used as the value for field `name` of the resulting entry in `.spec.routes`.
+The key of each entry is used as the value for field `name` of the resulting entry in `.spec.routes`.
 If key `secretName` isn't provided for an entry, the router's default wildcard certificate is used for that route.
 
 == `preferredRegistryRoute`
