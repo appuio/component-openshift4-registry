@@ -13,11 +13,4 @@ spec:
     node-role.kubernetes.io/infra: ''
   replicas: 2
   rolloutStrategy: RollingUpdate
-  routes:
-    - hostname: alt-registry.cluster.example.org
-      name: alt-route
-      secretName: alt-route-tls
-    - hostname: registry.cluster.example.org
-      name: registry-route
-      secretName: registry-route-tls
   storage: {}
