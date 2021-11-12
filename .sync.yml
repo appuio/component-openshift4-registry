@@ -7,7 +7,7 @@ docs/antora.yml:
   name: openshift4-registry
   title: OpenShift 4 Registry
 
-.github/workflows/test.yml:
+.github/workflows/test.yaml:
   test_makeTarget: test -e instance=${{ matrix.instance }}
   goldenTest_makeTarget: golden-diff -e instance=${{ matrix.instance }}
   matrix:
