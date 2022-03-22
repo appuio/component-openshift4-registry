@@ -2,6 +2,11 @@
   componentName: openshift4-registry
   githubUrl: https://github.com/appuio/component-openshift4-registry
   feature_goldenTests: true
+  testMatrix:
+    key: instance
+    entries:
+      - defaults
+      - minimal
 
 docs/antora.yml:
   name: openshift4-registry
@@ -10,8 +15,3 @@ docs/antora.yml:
 .github/workflows/test.yaml:
   test_makeTarget: test -e instance=${{ matrix.instance }}
   goldenTest_makeTarget: golden-diff -e instance=${{ matrix.instance }}
-  matrix:
-    key: instance
-    entries:
-      - defaults
-      - minimal
