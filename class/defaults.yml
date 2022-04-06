@@ -2,7 +2,7 @@ parameters:
   openshift4_registry:
     namespace: openshift-image-registry
     config:
-      httpSecret: '?{vaultkv:${customer:name}/${cluster:name}/registry/httpSecret}'
+      httpSecret: '?{vaultkv:${cluster:tenant}/${cluster:name}/registry/httpSecret}'
       logging: 2
       managementState: Managed
       nodeSelector:
