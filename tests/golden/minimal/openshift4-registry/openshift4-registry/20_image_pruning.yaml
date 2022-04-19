@@ -7,4 +7,6 @@ metadata:
   name: cluster
 spec:
   keepTagRevisions: 3
+  nodeSelector:
+    node-role.kubernetes.io/infra: ''
   suspend: false

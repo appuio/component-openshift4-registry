@@ -13,6 +13,7 @@ parameters:
     pruning:
       keepTagRevisions: 3
       suspend: false
+      nodeSelector: ${openshift4_registry:config:nodeSelector}
     preferredRegistryRoute: ~
     routes: {}
     secrets: {}
