@@ -1,5 +1,5 @@
 :global:
-  componentName: openshift4-registry
+  componentName: OpenShift 4 Registry
   githubUrl: https://github.com/appuio/component-openshift4-registry
   feature_goldenTests: true
   testMatrix:
@@ -7,10 +7,6 @@
     entries:
       - defaults
       - minimal
-
-docs/antora.yml:
-  name: openshift4-registry
-  title: OpenShift 4 Registry
 
 .github/workflows/test.yaml:
   test_makeTarget: test -e instance=${{ matrix.instance }}
