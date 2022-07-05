@@ -18,3 +18,7 @@ parameters:
     routes: {}
     secrets: {}
     cert_manager_certs: {}
+
+    monitoring:
+      enabled: true
+      instance: null
