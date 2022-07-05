@@ -84,4 +84,4 @@ local imageConfigSpec =
     tls.secrets,
   [if std.length(tls.certs) > 0 then '30_cert_manager_certs']:
     tls.certs,
-}
+} + (import 'monitoring.libsonnet')

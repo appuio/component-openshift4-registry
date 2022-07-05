@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations: {}
+  labels:
+    monitoring.syn.tools/infra: 'true'
+    name: syn-monitoring-openshift4-registry
+  name: syn-monitoring-openshift4-registry
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations: {}
+  labels:
+    name: openshift-image-registry
+  name: openshift-image-registry
+  namespace: syn-monitoring-openshift4-registry
+spec:
+  endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      interval: 30s
+      path: /extensions/v2/metrics
+      port: 5000-tcp
+      scheme: https
+      targetPort: 5000
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+        serverName: image-registry.openshift-image-registry.svc
+  namespaceSelector:
+    matchNames:
+      - openshift-image-registry
+  selector: {}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations: {}
+  labels:
+    name: openshift-image-registry-operator
+  name: openshift-image-registry-operator
+  namespace: syn-monitoring-openshift4-registry
+spec:
+  endpoints:
+    - interval: 60s
+      metricRelabelings:
+        - action: keep
+          regex: image_registry_.*
+          sourceLabels:
+            - __name__
+      path: /metrics
+      scheme: https
+      targetPort: 60000
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+        serverName: image-registry-operator.openshift-image-registry.svc
+  namespaceSelector:
+    matchNames:
+      - openshift-image-registry
+  selector:
+    matchLabels:
+      name: image-registry-operator
