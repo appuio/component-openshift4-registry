@@ -1,13 +1,13 @@
 {
   "template": "https://github.com/projectsyn/commodore-component-template.git",
-  "commit": "956a1b342ed680b02b1fb1b646dc5d4c640e2028",
+  "commit": "c04b1bb1bb5d0a89c8582c3608724217a27b5aa0",
   "checkout": "main",
   "context": {
     "cookiecutter": {
       "name": "OpenShift 4 Registry",
       "slug": "openshift4-registry",
       "parameter_key": "openshift4_registry",
-      "test_cases": "defaults minimal",
+      "test_cases": "defaults minimal custom-pvc",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",

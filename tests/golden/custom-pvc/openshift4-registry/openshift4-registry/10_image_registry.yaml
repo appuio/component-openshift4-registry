@@ -1,0 +1,18 @@
+apiVersion: imageregistry.operator.openshift.io/v1
+kind: Config
+metadata:
+  annotations: {}
+  labels:
+    name: cluster
+  name: cluster
+spec:
+  httpSecret: t-silent-test-1234/c-green-test-1234/registry/httpSecret
+  logging: 2
+  managementState: Managed
+  nodeSelector:
+    node-role.kubernetes.io/infra: ''
+  replicas: 1
+  rolloutStrategy: Recreate
+  storage:
+    pvc:
+      claim: image-registry-storage

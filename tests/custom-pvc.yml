@@ -1,0 +1,15 @@
+parameters:
+  openshift4_registry:
+    config:
+      replicas: 1
+      rolloutStrategy: Recreate
+      storage:
+        pvc:
+          claim: image-registry-storage
+    pvc:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Gi
