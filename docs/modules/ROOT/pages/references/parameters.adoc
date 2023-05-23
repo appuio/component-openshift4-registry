@@ -134,6 +134,44 @@ default:: undefined
 
 Secret key for an S3 type storage.
 
+== `pvc`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+This parameter allows customizing the registry PVC when `config.storage.pvc` is set.
+The PVC is created with the name given in `config.storage.pvc.claim`.
+The parameter contents are used verbatim for the PVC resource.
+
+[IMPORTANT]
+====
+The component doesn't verify whether the PVC configuration and the contents of parameter `config` will result in a working image registry.
+Please make sure you configure the registry appropriately for the provided PVC definition.
+====
+
+For example, you could use the following snippet to configure the registry to use an RWO PVC:
+
+[source,yaml]
+----
+parameters:
+  openshift4_registry:
+    config:
+      replicas: 1
+      rolloutStrategy: Recreate
+      storage:
+        pvc:
+          claim: image-registry-storage
+
+    pvc:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 100Gi
+----
+
 == Example
 
 [source,yaml]
