@@ -47,6 +47,13 @@ local imageConfigSpec =
         null
       );
 
+local pvc =
+  if std.length(params.pvc) > 0 && std.objectHas(registryConfigSpec.storage, 'pvc') then
+    local claimname = registryConfigSpec.storage.pvc.claim;
+    kube.PersistentVolumeClaim(claimname) + params.pvc
+  else
+    null;
+
 {
   '00_namespace': kube.Namespace(params.namespace) {
     metadata+: {
@@ -84,4 +91,6 @@ local imageConfigSpec =
     tls.secrets,
   [if std.length(tls.certs) > 0 then '30_cert_manager_certs']:
     tls.certs,
+  [if pvc != null then '40_registry_pvc']:
+    pvc,
 }

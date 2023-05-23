@@ -18,3 +18,4 @@ parameters:
     routes: {}
     secrets: {}
     cert_manager_certs: {}
+    pvc: {}
