@@ -1,5 +1,7 @@
 parameters:
   openshift4_registry:
+    =_metadata:
+      multi_tenant: true
     namespace: openshift-image-registry
     config:
       httpSecret: '?{vaultkv:${cluster:tenant}/${cluster:name}/registry/httpSecret}'
