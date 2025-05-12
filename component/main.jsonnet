@@ -23,29 +23,32 @@ local registryConfigSpec =
   };
 
 local imageConfigSpec =
-  if params.preferredRegistryRoute != null then
-    local ridx = std.find(
-      params.preferredRegistryRoute,
-      [ r.name for r in registryConfigSpec.routes ]
-    );
-    if std.length(ridx) > 0 then
-      local hostname = registryConfigSpec.routes[ridx[0]].hostname;
-      {
-        // We only need to specify our preferred hostname, as the
-        // openshift-apiserver is configured with the contents of this field
-        // prepended to the list of hostnames extracted from the
-        // config.imageregistry object.
-        externalRegistryHostnames: [ hostname ],
-      }
-    else
-      std.trace(
-        (
-          '[WARN] Registry route `%s` not found, ' %
-          params.preferredRegistryRoute
-        ) +
-        'not configuring preferred external registry hostname',
-        null
+  local externalRegistryHostnames =
+    if params.preferredRegistryRoute != null then
+      local ridx = std.find(
+        params.preferredRegistryRoute,
+        [ r.name for r in registryConfigSpec.routes ]
       );
+      if std.length(ridx) > 0 then
+        local hostname = registryConfigSpec.routes[ridx[0]].hostname;
+        {
+          // We only need to specify our preferred hostname, as the
+          // openshift-apiserver is configured with the contents of this field
+          // prepended to the list of hostnames extracted from the
+          // config.imageregistry object.
+          externalRegistryHostnames: [ hostname ],
+        }
+      else
+        std.trace(
+          (
+            '[WARN] Registry route `%s` not found, ' %
+            params.preferredRegistryRoute
+          ) +
+          'not configuring preferred external registry hostname',
+          {}
+        )
+    else {};
+  params.imageConfigSpec + externalRegistryHostnames;
 
 local pvc =
   if std.length(params.pvc) > 0 && std.objectHas(registryConfigSpec.storage, 'pvc') then
@@ -68,7 +71,7 @@ local pvc =
     kube._Object(versionGroup, 'Config', 'cluster') {
       spec+: registryConfigSpec,
     },
-  [if imageConfigSpec != null then '10_image_config']:
+  [if std.length(imageConfigSpec) > 0 then '10_image_config']:
     kube._Object('config.openshift.io/v1', 'Image', 'cluster') {
       spec+: imageConfigSpec,
     },
