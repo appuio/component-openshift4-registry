@@ -1,0 +1,5 @@
+parameters:
+  openshift4_registry:
+    imageConfigSpec:
+      allowedRegistriesForImport:
+        - domain: ghcr.io

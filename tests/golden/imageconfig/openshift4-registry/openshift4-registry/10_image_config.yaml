@@ -1,0 +1,10 @@
+apiVersion: config.openshift.io/v1
+kind: Image
+metadata:
+  annotations: {}
+  labels:
+    name: cluster
+  name: cluster
+spec:
+  allowedRegistriesForImport:
+    - domain: ghcr.io
