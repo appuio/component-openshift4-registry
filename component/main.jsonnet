@@ -3,6 +3,8 @@ local kube = import 'lib/kube.libjsonnet';
 local inv = kap.inventory();
 local params = inv.parameters.openshift4_registry;
 
+local esp = import 'lib/espejote.libsonnet';
+
 local tls = import 'tls.libsonnet';
 
 local versionGroup = 'imageregistry.operator.openshift.io/v1';
@@ -72,9 +74,17 @@ local pvc =
       spec+: registryConfigSpec,
     },
   [if std.length(imageConfigSpec) > 0 then '10_image_config']:
-    kube._Object('config.openshift.io/v1', 'Image', 'cluster') {
-      spec+: imageConfigSpec,
-    },
+    esp.clusterScopedObject(
+      'openshift-config',
+      {
+        apiVersion: 'config.openshift.io/v1',
+        kind: 'Image',
+        metadata: {
+          name: 'cluster',
+        },
+        spec: imageConfigSpec,
+      }
+    ),
   '20_image_pruning':
     kube._Object(versionGroup, 'ImagePruner', 'cluster') {
       spec+: params.pruning,

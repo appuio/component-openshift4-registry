@@ -4,6 +4,9 @@ parameters:
       - type: https
         source: https://raw.githubusercontent.com/projectsyn/component-cert-manager/v2.2.0/lib/cert-manager.libsonnet
         output_path: vendor/lib/cert-manager.libsonnet
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-espejote/v0.9.0/lib/espejote.libsonnet
+        output_path: vendor/lib/espejote.libsonnet
 
   openshift4_registry:
     preferredRegistryRoute: registry-route
