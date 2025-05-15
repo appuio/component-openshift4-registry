@@ -38,6 +38,32 @@ Configure the registry storage based on the cloud provider.
 It's suggested to define this higher up the config hierarchy.
 Most probably the one of the cloud region.
 
+== `preferredRegistryRoute`
+
+[horizontal]
+type:: string
+default:: `null`
+
+This parameter can be used to set a preferred external registry hostname.
+This may be useful to select a preferred registry route when setting multiple routes via component parameter `config.routes`.
+
+The content of this parameter is injected into the cluster's `image.config.openshift.io/cluster` resource in field `spec.externalRegistryHostnames`.
+
+See component parameter `imageConfigSpec` for more details on how the `image.config.openshift.io/cluster` resource can be customized through this component.
+
+== `imageConfigSpec`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+This parameter allows users to add arbitrary configurations in the cluster's `image.config.openshift.io/cluster` object.
+The parameter is applied as a partial config via https://github.com/vshn/espejote[Espejote].
+It's the user's responsibility to provide a well-formed partial config.
+
+See the https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/images/image-configuration#images-configuration-parameters_image-configuration[upstream documentation] for available parameters.
+
+IMPORTANT: setting component parameter `preferredRegistryRoute` will override field `externalRegistryHostnames` provided through this parameter.
 
 == `routes`
 
