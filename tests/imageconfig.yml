@@ -1,0 +1,11 @@
+parameters:
+  kapitan:
+    dependencies:
+      - type: https
+        source: https://raw.githubusercontent.com/projectsyn/component-espejote/v0.9.0/lib/espejote.libsonnet
+        output_path: vendor/lib/espejote.libsonnet
+
+  openshift4_registry:
+    imageConfigSpec:
+      allowedRegistriesForImport:
+        - domain: ghcr.io

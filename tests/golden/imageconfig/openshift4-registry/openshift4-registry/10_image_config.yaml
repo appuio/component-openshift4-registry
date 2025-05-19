@@ -51,8 +51,10 @@ spec:
             "name": "cluster"
         },
         "spec": {
-            "externalRegistryHostnames": [
-                "registry.cluster.example.org"
+            "allowedRegistriesForImport": [
+                {
+                    "domain": "ghcr.io"
+                }
             ]
         }
     }

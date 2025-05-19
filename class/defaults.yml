@@ -17,6 +17,7 @@ parameters:
       suspend: false
       nodeSelector: ${openshift4_registry:config:nodeSelector}
     preferredRegistryRoute: ~
+    imageConfigSpec: {}
     routes: {}
     secrets: {}
     cert_manager_certs: {}
